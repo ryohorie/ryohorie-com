@@ -38,7 +38,7 @@ test("homepage retains the profile and all four apps as static HTML", () => {
   assert.deepEqual(elements(homepage, "h1").map(content), ["堀江 良"])
   assert.match(
     content(homepage),
-    /神戸でスマホアプリの会社を経営。個人開発から起業。/,
+    /音楽大学でジャズを学び、音楽ゲームやWebサービスの開発、\s*個人でのアプリ開発を経て、2019年4月に株式会社GENITを設立しました。/,
   )
   assert.deepEqual(elements(homepage, "h3").map(content), [
     "ピアノあそび",
