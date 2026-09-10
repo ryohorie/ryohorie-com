@@ -1,0 +1,67 @@
+---
+import { profile } from "../data/profile"
+---
+
+<div class="social-links">
+  <a
+    href={profile.twitterUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="堀江 良のTwitter（X）"
+  >
+    <svg
+      class="twitter"
+      viewBox="0 0 24 24"
+      width="40"
+      height="40"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 0 0 1.88-2.38c-.83.5-1.75.86-2.73 1.06a4.28 4.28 0 0 0-7.3 3.9 12.14 12.14 0 0 1-8.82-4.47 4.28 4.28 0 0 0 1.33 5.71 4.24 4.24 0 0 1-1.94-.54v.05c0 2.07 1.47 3.8 3.42 4.19-.36.1-.74.15-1.13.15-.28 0-.55-.03-.81-.08a4.28 4.28 0 0 0 4 2.97A8.59 8.59 0 0 1 2 19.02a12.12 12.12 0 0 0 6.56 1.92c7.88 0 12.2-6.53 12.2-12.2 0-.19 0-.37-.01-.56A8.72 8.72 0 0 0 22.46 6z" />
+    </svg>
+  </a>
+  <a
+    href={profile.facebookUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="堀江 良のFacebook"
+  >
+    <svg
+      class="facebook"
+      viewBox="0 0 24 24"
+      width="40"
+      height="40"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3l-.5 3H13v6.95c5.05-.5 9-4.76 9-9.95z" />
+    </svg>
+  </a>
+</div>
+
+<style>
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  a {
+    display: grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  svg {
+    fill: currentColor;
+  }
+
+  .twitter {
+    color: #1da1f2;
+  }
+
+  .facebook {
+    color: #4267b2;
+  }
+</style>

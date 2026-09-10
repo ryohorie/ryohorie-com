@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro"
+---
+
+<Layout
+  title="ページが見つかりません | 堀江 良"
+  description="お探しのページは見つかりませんでした。"
+  noindex
+>
+  <div class="container not-found">
+    <h1>404: ページが見つかりません</h1>
+    <p>お探しのページは移動または削除された可能性があります。</p>
+    <a href="/">トップページに戻る</a>
+  </div>
+</Layout>
+
+<style>
+  .not-found {
+    padding-block: 64px;
+  }
+
+  h1 {
+    margin-bottom: 24px;
+    font-size: 1.75rem;
+  }
+
+  p {
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+  }
+</style>

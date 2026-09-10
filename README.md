@@ -1,99 +1,68 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's default starter
-</h1>
+# ryohorie.com
 
-Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+堀江 良のプロフィールサイト。Astroで静的HTMLを生成し、Firebase Hostingで配信します。
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.com/docs/gatsby-starters/)._
+## 開発
 
-## 🚀 Quick start
+Node.js 24 LTSを推奨します（Astroの動作要件は22.12.0以上）。`.nvmrc`とGitHub ActionsはNode.js 24に揃えています。
 
-1.  **Create a Gatsby site.**
+```sh
+nvm use
+npm ci
+npm run dev
+```
 
-    Use the Gatsby CLI ([install instructions](https://www.gatsbyjs.com/docs/tutorial/getting-started/part-0/#gatsby-cli)) to create a new site, specifying the default starter.
+開発サーバーは通常 `http://localhost:4321` で起動します。`npm start` / `npm run develop` も同じコマンドです。
 
-    ```shell
-    # create a new Gatsby site using the default starter
-    gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
-    ```
+## 確認・ビルド
 
-1.  **Start developing.**
+```sh
+npm run check         # Astro / TypeScriptの診断
+npm run format:check  # フォーマット確認
+npm test              # 本番ビルドと生成HTMLの回帰テスト
+npm run preview       # dist/のプレビュー
+```
 
-    Navigate into your new site’s directory and start it up.
+`npm run build` は本番用ファイルを `dist/` に生成します。`npm run serve` は `preview` の別名です。`npm run format` で整形、`npm run clean` で生成物（`dist/` と `.astro/`）を削除できます。
 
-    ```shell
-    cd my-default-starter/
-    gatsby develop
-    ```
+テストではプロフィール・アプリ・動画・外部リンクの保持、SEOメタデータ、画像・CSSの参照、JavaScript不要の出力、404とFirebaseの配信設定を確認します。外部YouTube動画の再生可否は配信元に依存し、このテストの対象には含みません。
 
-1.  **Open the source code and start editing!**
+## 構成
 
-    Your site is now running at `http://localhost:8000`!
+- `src/pages/index.astro`: トップページとレスポンシブレイアウト
+- `src/pages/404.astro`: 日本語の404ページ
+- `src/layouts/Layout.astro`: 共通HTML、SEO、ヘッダー、フッター
+- `src/components/`: YouTube埋め込みとSNSリンク
+- `src/data/profile.ts`: プロフィール、アプリ一覧、動画ID、外部リンク
+- `src/styles/global.css`: 共通スタイル
+- `public/images/`: アプリ画像とOGP画像（URLは従来どおり `/images/...`）
+- `tests/site.test.mjs`: 生成HTMLに対する回帰テスト
 
-    Note: You'll also see a second link: `http://localhost:8000/___graphql`. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby Tutorial](https://www.gatsbyjs.com/docs/tutorial/getting-started/part-4/#use-graphiql-to-explore-the-data-layer-and-write-graphql-queries).
+コンテンツの変更は主に `src/data/profile.ts` で行います。公開URLは `astro.config.mjs` の `site` に設定しています。OGP画像には実在する `public/images/ogp.jpeg` を使い、メタデータには絶対URLを出力します。
 
-    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+## デプロイ
 
-## 🚀 Quick start (Netlify)
+既存のFirebaseプロジェクト `ryohorie-com` とGitHub Actionsを継続利用します。`firebase.json` の公開ディレクトリは `dist` です。サーバー用アダプターやSPA用リライトは不要です。
 
-Deploy this starter with one click on [Netlify](https://app.netlify.com/signup):
+- 同一リポジトリからのPR: 検証成功後にFirebaseのプレビューチャンネルへデプロイ
+- `main` へのpush: 検証成功後にFirebase Hosting本番へデプロイ
 
-[<img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify" />](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
+両ワークフローは `npm ci`、フォーマット確認、Astroの診断、本番ビルドとテストを実行します。既存の `FIREBASE_SERVICE_ACCOUNT_RYOHORIE_COM` シークレットを利用します。
 
-## 🧐 What's inside?
+Firebase CLIが設定済みの環境で手動公開する場合:
 
-A quick look at the top-level files and directories you'll see in a typical Gatsby project.
+```sh
+npm ci
+npm run format:check
+npm run check
+npm test
+firebase deploy --only hosting --project ryohorie-com
+```
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package.json
-    └── README.md
+## Gatsbyからの移行
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
+プロフィール、4つのアプリ紹介、ヒーロー動画と6本の演奏動画、SNSリンク、元の画像と基本レイアウトを引き継いでいます。React、MUI、Emotion、Gatsbyの実行時依存はAstroコンポーネントとCSSへ置き換えました。ページ自体が配信するJavaScriptはありません（YouTubeの埋め込み内部を除く）。
 
-1.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
+Gatsbyスターターのサンプルルート `/page-2`、`/using-typescript`、`/using-ssr`、`/using-dsg` と、スターター用アイコン・マニフェストは削除しました。これらのURLは通常の404になります。
 
-1.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
-
-1.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-browser/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
-
-1.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/) for more detail).
-
-1.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
-
-1.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-
-1.  **`LICENSE`**: This Gatsby starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
-
-1.  **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
-
-1.  **`README.md`**: A text file containing useful reference information about your project.
-
-## 🎓 Learning Gatsby
-
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.com/). Here are some places to start:
-
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.com/docs/tutorial/getting-started/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
-
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.com/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
-
-## 💫 Deploy
-
-[Build, Deploy, and Host On Netlify](https://netlify.com)
-
-The fastest way to combine your favorite tools and APIs to build the fastest sites, stores, and apps for the web. And also the best place to build, deploy, and host your Gatsby sites.
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+参考: [AstroのGatsby移行ガイド](https://docs.astro.build/en/guides/migrate-to-astro/from-gatsby/)、[Firebase Hostingへのデプロイ](https://docs.astro.build/en/guides/deploy/firebase/)。
