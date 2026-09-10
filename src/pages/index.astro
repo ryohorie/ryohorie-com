@@ -12,7 +12,9 @@ import { apps, profile, videoIds } from "../data/profile"
     <div class="container">
       <h1 id="profile-heading">{profile.name}</h1>
       <h2 class="profile-role">{profile.role}</h2>
-      <p class="intro">{profile.biography}</p>
+      {profile.biography.map(paragraph => (
+        <p class="intro biography">{paragraph}</p>
+      ))}
     </div>
   </section>
 
@@ -92,6 +94,10 @@ import { apps, profile, videoIds } from "../data/profile"
 </Layout>
 
 <style>
+  .biography {
+    white-space: pre-line;
+  }
+
   h1 {
     margin-bottom: 16px;
     font-size: 1.5rem;
