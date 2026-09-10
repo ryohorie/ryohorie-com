@@ -1,0 +1,188 @@
+---
+import Layout from "../layouts/Layout.astro"
+import SocialLinks from "../components/SocialLinks.astro"
+import YouTubeEmbed from "../components/YouTubeEmbed.astro"
+import { apps, profile, videoIds } from "../data/profile"
+---
+
+<Layout>
+  <YouTubeEmbed videoId={profile.heroVideoId} title="堀江 良の演奏動画" hero />
+
+  <section class="section" aria-labelledby="profile-heading">
+    <div class="container">
+      <h1 id="profile-heading">{profile.name}</h1>
+      <h2 class="profile-role">{profile.role}</h2>
+      <p class="intro">{profile.biography}</p>
+    </div>
+  </section>
+
+  <section class="section section-muted" aria-labelledby="apps-heading">
+    <div class="container">
+      <h2 id="apps-heading" class="section-heading">
+        株式会社GENIT代表
+      </h2>
+      <p class="intro">
+        子供向けの音楽教育アプリやミュージシャン向けの音楽アプリを提供しています。
+      </p>
+      <div class="app-grid">
+        {apps.map(app => (
+          <article class="app-card">
+            <img
+              src={app.icon}
+              alt={app.title}
+              width="80"
+              height="80"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="app-content">
+              <h3>{app.title}</h3>
+              <p>{app.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="more-link">
+        <a
+          href={profile.companyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="株式会社GENITのアプリをもっと見る"
+        >
+          もっと見る
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="videos-heading">
+    <div class="container">
+      <h2 id="videos-heading" class="section-heading">
+        演奏動画
+      </h2>
+      <div class="video-grid">
+        {videoIds.map((videoId, index) => (
+          <YouTubeEmbed
+            videoId={videoId}
+            title={`堀江 良の演奏動画 ${index + 1}`}
+          />
+        ))}
+      </div>
+      <div class="more-link">
+        <a
+          href={profile.youtubeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="YouTubeで演奏動画をもっと見る"
+        >
+          もっと見る
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted" aria-labelledby="social-heading">
+    <div class="container">
+      <h2 id="social-heading" class="section-heading">
+        SNS
+      </h2>
+      <SocialLinks />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  h1 {
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.167;
+    letter-spacing: -0.01562em;
+  }
+
+  .profile-role {
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .app-grid,
+  .video-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .app-grid {
+    gap: 24px;
+  }
+
+  .app-card {
+    overflow: hidden;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow:
+      0 2px 1px -1px rgb(0 0 0 / 20%),
+      0 1px 1px 0 rgb(0 0 0 / 14%),
+      0 1px 3px 0 rgb(0 0 0 / 12%);
+  }
+
+  .app-card img {
+    display: block;
+    margin: 16px auto 0;
+    border-radius: 12px;
+  }
+
+  .app-content {
+    padding: 16px 16px 24px;
+  }
+
+  .app-content h3 {
+    margin-bottom: 8.4px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.334;
+  }
+
+  .app-content p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.43;
+  }
+
+  .video-grid {
+    gap: 32px 16px;
+    margin-bottom: 16px;
+  }
+
+  .video-grid + .more-link {
+    margin-top: 16px;
+  }
+
+  @media (min-width: 600px) {
+    .profile-role {
+      font-size: 1.25rem;
+    }
+
+    .app-grid,
+    .video-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    .profile-role {
+      font-size: 1.5rem;
+    }
+
+    .video-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

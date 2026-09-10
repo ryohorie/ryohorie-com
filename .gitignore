@@ -54,9 +54,12 @@ typings/
 # dotenv environment variable files
 .env*
 
-# gatsby files
-.cache/
-public
+# Astro generated files
+.astro/
+dist/
+
+# Firebase local cache
+.firebase/
 
 # Mac files
 .DS_Store
